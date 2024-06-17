@@ -14,7 +14,7 @@ bot = Bot(token=TOKEN)
 # bot = Bot(token='7060128802:AAF6AYAlZU1OnfrfW0tFvXe7asFjcd5vfaM')
 dp = Dispatcher()
 logging.basicConfig(level=logging.INFO, 
-                    filename='bot_log.log')
+                    filename='botlog.log')
 
 # 3. Обработка команды start
 @dp.message(Command(commands=['start']))
