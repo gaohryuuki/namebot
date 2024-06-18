@@ -11,7 +11,6 @@ from string import punctuation
 # 2. Инициализация объектов
 TOKEN = os.getenv('TOKEN')
 bot = Bot(token=TOKEN)
-# bot = Bot(token='7060128802:AAF6AYAlZU1OnfrfW0tFvXe7asFjcd5vfaM')
 dp = Dispatcher()
 logging.basicConfig(level=logging.INFO, 
                     filename='botlog.log')
@@ -25,26 +24,8 @@ async def process_command_start(message: Message):
     logging.info(f'{user_name} {user_id} запустил бота')
     await bot.send_message(chat_id=user_id, text=text)
 
-
-# 4. Обработка всех сообщений
-@dp.message()
-async def send_echo(message: Message):
-    user_name = message.from_user.full_name
-    user_id = message.from_user.id
-    text = message.text
-    logging.info(f'{user_name} {user_id} оправил данное ФИО: {text}')
-
-    # Логика обработки ФИО
-    # Убераем знаки препинания
-    for char in punctuation:
-        if char in text:
-            text = text.replace(char,'')
-    
-    # ФИО заглавными для замены
-    text = text.upper()
-
-    # Словарь замены с Кириллицы на Латиницу
-    cyr_to_lat = {
+# Словарь замены с Кириллицы на Латиницу
+cyr_to_lat = {
         'А':'A',
         'Б':'B',
         'В':'V',
@@ -80,15 +61,37 @@ async def send_echo(message: Message):
         'Ь':''
     }
 
-    # Заменяем Кириллицу на Латиницу в строке
-    for char in text:
-        if char in cyr_to_lat:
-            text = text.replace(char,cyr_to_lat[char])
+
+# 4. Обработка всех сообщений
+@dp.message()
+async def send_echo(message: Message):
+    user_name = message.from_user.full_name
+    user_id = message.from_user.id
+    text = message.text
+    logging.info(f'{user_name} {user_id} оправил данное ФИО: {text}')
+
+    # Логика обработки ФИО
+    # Убераем знаки препинания
+    for char in punctuation:
+        if char in text:
+            text = text.replace(char,'')
     
-    # Переводим в заглавный вид
-    result = [x.lower().capitalize() for x in text.split()]
+    # ФИО заглавными и в виде списка слов
+    text = text.upper()
+    list_of_words = text.split()
+
+    result = []
+    
+    # Заменяем Кириллицу на Латиницу в строке
+    for word in list_of_words:
+        for char in word:
+            if char in cyr_to_lat:
+                result.append(cyr_to_lat[char])
+        result.append(' ')
 
     # Собираем строку ФИО на Латинице
+    text = ''.join(result).lower().rstrip()
+    result = [word.capitalize() for word in text.split()]
     text = ' '.join(result)
 
     logging.info(f'{user_name} {user_id} получил данное ФИО: {text}')

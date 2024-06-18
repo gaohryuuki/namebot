@@ -15,19 +15,25 @@
 Название бота:
 * _ФИО с Кириллицы на Латиницу_
 
-На фото лицо бота: 
+На фото лицо бота обновлённой версии: 
 
-![alt text](https://raw.githubusercontent.com/gaohryuuki/namebot/main/Exhausted_cat.jpg)
+![alt text](https://raw.githubusercontent.com/gaohryuuki/namebot/main/sleepy_kitten.jpg)
 
 ## Инструкции по запуску
-1. Запустите терминал в папке репозитория `namebot`
-2. Создайте образ через docker: 
+1. После клонирования, в `Dockerfile` файле напротив `ENV TOKEN=` вставьте:
+```
+   '7060128802:AAF6AYAlZU1OnfrfW0tFvXe7asFjcd5vfaM'
+```
+Не забудьте ковычки, это токен для соединения с ботом.
+
+2. Запустите терминал в папке репозитория `namebot`
+3. Создайте образ через docker: 
 ```
    docker build -t namebot .
 ```
    Данная команда создаст образ на основе Dockerfile из текущей папки и назовёт его `namebot`
 
-3. Запустите контейнер на основе данного образа:
+4. Запустите контейнер на основе данного образа:
  ``` 
     docker run -d -p 80:80 namebot   
 ```
